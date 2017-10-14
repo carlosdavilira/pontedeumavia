@@ -2,7 +2,7 @@
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- *///
+ */
 package trabalhoso;
 
 import java.util.concurrent.Semaphore;
@@ -109,6 +109,8 @@ public class TrabalhoSO extends Application{
                     }
                     mutex.release();
                     
+                    // carro esperando
+      
                     btncar.setScaleX(0.08);
                     btncar.setScaleY(0.2);
                     btncar.setLayoutY(-95);
@@ -119,54 +121,34 @@ public class TrabalhoSO extends Application{
                     
                     if(origem.equals("oeste")){
                         
-                        int guarda_tempo2 = tempo_espera;
-                        
-                        if(guarda_tempo2>9){
-                            
-                            while(guarda_tempo2%5!=0){
-                            
-                                guarda_tempo2--;
-                                
-                            }
-                            
-                            guarda_tempo2 = tempo_espera - guarda_tempo2 + 5;
-                            
+                        if(tempo_espera<9){
+                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+tempo_espera+".png")));
+                        }
+                        else{
+                            int gd2 = (tempo_espera%5)+5;
+                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+gd2+".png")));
                         }
                         
-                        btncar.setImage(new Image(new FileInputStream("C:\\images\\ferro"+guarda_tempo2+".png")));
+                        btncar.setImage(btncar2.getImage());
                         btncar.setRotate(180);
                         btncar.setX(-325);
-                        
-                        
-                        btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+guarda_tempo2+".png"))); 
+                         
                         btncar2.setRotate(180);
                         
                         stage.setX(posx + 15 + new Random().nextInt(186));
                         
-                        int gd3 = tempo_espera;
+                        for(int i=tempo_espera-1;i>0;i--){
                         
-                        while(gd3>0){
-                        
-                            int gd4 = gd3;
-                            
-                            if(gd3>9){
-                            
-                                while(gd3%5!=0){
-
-                                    gd3--;
-
-                                }
-
-                                gd3 = gd4 - gd3 + 5;
-                            
+                            if(i<10){
+                                conta_tempo(1000);
+                                btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+i+".png")));
                             }
-                            
-                            conta_tempo(1000);
-                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+gd3+".png")));
-                            gd3 = gd4;
-                            gd3 --;
-                            
-                            
+                            else{
+                                conta_tempo(1000);
+                                int gd3 = (i%5)+5;
+                                btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+gd3+".png")));
+                            }
+                        
                         }
                         
                         conta_tempo(1000);
@@ -184,20 +166,38 @@ public class TrabalhoSO extends Application{
                         btncar2.setRotate(0);
                         
                         stage.setX(posx + 700 + new Random().nextInt(191));
+                        
+                        int gd5 = 5;
+                        
+                        for(int i=1;i<tempo_espera+1;i++){
+                        
+                            if(i<10){
+                               conta_tempo(1000);
+                               btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+i+".png"))); 
+                            }
+                            else{
+                               conta_tempo(1000);  
+                               btncar2.setImage(new Image(new FileInputStream("C:\\images\\ferro"+gd5+".png")));
+                               gd5++; 
+                               if(gd5==10){
+                                   gd5=5;
+                               } 
+                            }
+                            
+                        }
+ 
                        
                     }
                     
+                    // carro tenta atravessar
                     
-                    for(int i=0;i<tempo_espera;i++){
-                        System.out.println("Carro "+id+" esperando");
-                        Thread.sleep(1000);
+                    Image img1 = btncar2.getImage();
+                    
+                    for(int i=1;i<4;i++){
+                        conta_tempo(20);
+                        btncar2.setImage(new Image(new FileInputStream("C:\\images\\tenta"+i+".png")));
                     }
-                    
-                    System.out.println("Carro "+id+" tenta atravessar");
-                    
-                    int perc = 0;
 
-                    
                     while(acorda.availablePermits()==0){
                         if(origem.equals("oeste")){
 
