@@ -18,9 +18,12 @@ import javafx.geometry.*;
 import java.io.FileInputStream;
 import javafx.stage.Stage;  
 import java.io.FileNotFoundException;
+import static java.lang.Thread.sleep;
 import javafx.scene.layout.StackPane;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.control.TextField;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -296,6 +299,56 @@ public class TrabalhoSO extends Application{
             }
                 
         }
+        public void MovimentarCarro() throws InterruptedException{
+          
+                if(this.origem.equals("oeste"))
+                {                   
+                   Carro carroGenerico = this;
+                    new Thread()
+                    {
+                        @Override
+                        public void run(){
+                            
+                        for(int i = -325 ; carroGenerico.btncar.getX() != 550 ; i++)
+                          {
+                            carroGenerico.btncar.setX(i);
+                         
+                            try {
+                                sleep(50);
+                            } catch (InterruptedException ex) {
+                                //Logger.getLogger(TrabalhoSO.class.getName()).log(Level.SEVERE, null, ex);
+                              System.out.println("MovimentarCarro() - Oeste "+carroGenerico.btncar.getX());
+
+                            }
+                          }
+                           
+                    }   
+                }.start();
+                }
+                else
+                {                    
+                  Carro carroGenerico = this;
+                    new Thread()
+                    {
+                    @Override
+                    public void run(){
+                   
+                    for(int i = 550;carroGenerico.btncar.getX() != -325; i--)
+                    {
+                        carroGenerico.btncar.setX(i);
+                        try {
+                            sleep(50);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(Pontedeumvia.TrabalhoSO.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        System.out.println("MovimentarCarro() - Leste "+i);
+
+                    }
+                    }   
+                }.start();
+                }
+            
+        }
         
     }
     
@@ -419,6 +472,11 @@ public class TrabalhoSO extends Application{
                     liscar.add(carro);
                     carro.start();
                     root.getChildren().add(btncar);
+                     try {
+                        carro.MovimentarCarro();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Pontedeumvia.TrabalhoSO.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     
                 }
                 
