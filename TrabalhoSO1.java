@@ -70,25 +70,19 @@ public class TrabalhoSO extends Application{
     
     }
     
-    public static boolean colide(Carro img1,Carro img2){
+    public static String colide(ImageView img1,ImageView img2){
     
-        /*Bounds bound1 = img1.localToScene(img1.getBoundsInLocal());
-	Bounds bound2 = img2.localToScene(img2.getBoundsInLocal());
+        Bounds bound1 = img1.localToScene(img1.getBoundsInLocal());
+        Bounds bound2 = img2.localToScene(img2.getBoundsInLocal());
         
-        if(bound1.contains(bound2)){
-            return(true);
+        if(bound1.intersects(bound2)){
+            //System.out.println("sim");
+            return("s");
         }
         else{
-            return(false);
-        }*/
-        
-        if(img1.retcar.intersects(img2.retcar.getBoundsInParent())){
-            return(true);
+            //System.out.println("não");
+            return("n");
         }
-        else{
-            return(false);
-        }
-        
         
     }
     
@@ -321,43 +315,28 @@ public class TrabalhoSO extends Application{
                         final KeyFrame kf = new KeyFrame(Duration.millis(tempo_travessia*1000), kv);
                         timeline.getKeyFrames().add(kf);
                         timeline.play();
-                        /*timeline.setOnFinished(new EventHandler<ActionEvent>(){
-                            public void handle(ActionEvent event){
-                                timeline.stop();
-                            }
-                        });
-                        
-                        while(timeline.getStatus().equals(Timeline.Status.RUNNING) || 
-                                timeline.getStatus().equals(Timeline.Status.PAUSED)){
-                        
-                            retcar.setX(btncar.getX());
+                        int i=0;
+                        int j = tempo_travessia*1000;
+                        int k=0;
+                        while(i<j){
                             
-                            if((lisponte.indexOf(this)>0) &&
-                                    colide(this,lisponte.get(lisponte.indexOf(this)-1))){
-                                timeline.pause();
-                            }
-                            else{
-                                if(timeline.getStatus().equals(Timeline.Status.PAUSED)){
+                            if(lisponte.indexOf(this)>0){
+                                if(colide(btncar,lisponte.get(lisponte.indexOf(this)-1).btncar).contains("s")){
+                                    k = lisponte.get(lisponte.indexOf(this)-1).tempo_travessia;
+                                    timeline.stop();
+                                    timeline = new Timeline();
+                                    KeyValue kv2 = new KeyValue(btncar.xProperty(), 545);
+                                    KeyFrame kf2 = new KeyFrame(Duration.millis(k*1000), kv2);
+                                    timeline.getKeyFrames().add(kf2);
                                     timeline.play();
                                 }
                             }
-                        
-                        }*/
-                        
-                        int l = tempo_travessia;
-                        for(int i=0;i<l;i++){
-                            
-                            System.out.println("Carro "+id+" atravessando");
-                            for(int j=0;j<500;j++){
-                                conta_tempo(1);
+                            i++;
+                            j = j+k;
+                            if(btncar.getX()>=545){
+                                i=j;
                             }
-                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\truck2.png")));
-                            for(int j=0;j<500;j++){
-                               
-                                conta_tempo(1);
-                            }
-                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\truck.png")));
-                            
+                            conta_tempo(1);
                         }
                         timeline.stop();
 
@@ -389,26 +368,32 @@ public class TrabalhoSO extends Application{
                         ponte++;
                         mutex.release();
 
-                        final Timeline timeline = new Timeline();
+                        Timeline timeline = new Timeline();
                         final KeyValue kv = new KeyValue(btncar.xProperty(), -323);
                         final KeyFrame kf = new KeyFrame(Duration.millis(tempo_travessia*1000), kv);
                         timeline.getKeyFrames().add(kf);
                         timeline.play();
-                        
-                        int l = tempo_travessia;
-                        for(int i=0;i<l;i++){
-                            
-                            System.out.println("Carro "+id+" atravessando");
-                            for(int j=0;j<500;j++){
-                                conta_tempo(1);
+                        int i=0;
+                        int j = tempo_travessia*1000;
+                        int k=0;
+                        while(i<j){
+                            if(lisponte.indexOf(this)>0){
+                                if(colide(btncar,lisponte.get(lisponte.indexOf(this)-1).btncar).contains("s")){
+                                    k = lisponte.get(lisponte.indexOf(this)-1).tempo_travessia;
+                                    timeline.stop();
+                                    timeline = new Timeline();
+                                    KeyValue kv2 = new KeyValue(btncar.xProperty(), -323);
+                                    KeyFrame kf2 = new KeyFrame(Duration.millis(k*1000), kv2);
+                                    timeline.getKeyFrames().add(kf2);
+                                    timeline.play();
+                                }
                             }
-                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\truck2.png")));
-                            for(int j=0;j<500;j++){
-                               
-                                conta_tempo(1);
+                            i++;
+                            j = j+k;
+                            if(btncar.getX()<=-323){
+                                i=j;
                             }
-                            btncar2.setImage(new Image(new FileInputStream("C:\\images\\truck.png")));
-                            
+                            conta_tempo(1);
                         }
                         timeline.stop();
 
