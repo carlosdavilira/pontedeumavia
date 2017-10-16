@@ -297,24 +297,26 @@ public class TrabalhoSO extends Application{
                 }catch(Exception e){}
             
             }
-                
+          System.out.println("O carro morreu");      
         }
+        // -325 é aposição inicial partindo do oeste e 550 do leste
         public void MovimentarCarro() throws InterruptedException{
-          
+                Carro carroGenerico = this; //instancia do carro atual para usar na thread
+                int tempoPorIteracao = (carroGenerico.tempo_travessia*1000) / 826; 
                 if(this.origem.equals("oeste"))
-                {                   
-                   Carro carroGenerico = this;
+                {                 
+                   
                     new Thread()
                     {
                         @Override
-                        public void run(){
+                        public void run(){                           
                             
-                        for(int i = -325 ; carroGenerico.btncar.getX() != 550 ; i++)
+                        for(int i = -325 ; carroGenerico.btncar.getX() < 550 ; i++)
                           {
                             carroGenerico.btncar.setX(i);
                          
                             try {
-                                sleep(50);
+                                sleep(tempoPorIteracao);
                             } catch (InterruptedException ex) {
                                 //Logger.getLogger(TrabalhoSO.class.getName()).log(Level.SEVERE, null, ex);
                               System.out.println("MovimentarCarro() - Oeste "+carroGenerico.btncar.getX());
@@ -327,17 +329,16 @@ public class TrabalhoSO extends Application{
                 }
                 else
                 {                    
-                  Carro carroGenerico = this;
-                    new Thread()
+                  new Thread()
                     {
                     @Override
                     public void run(){
                    
-                    for(int i = 550;carroGenerico.btncar.getX() != -325; i--)
+                     for(int i = 550;carroGenerico.btncar.getX() > -325; i--)
                     {
                         carroGenerico.btncar.setX(i);
                         try {
-                            sleep(50);
+                            sleep(tempoPorIteracao);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(Pontedeumvia.TrabalhoSO.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -347,9 +348,9 @@ public class TrabalhoSO extends Application{
                     }   
                 }.start();
                 }
-            
+               // carroGenerico.mata_thread = 1;
         }
-        
+     
     }
     
 
