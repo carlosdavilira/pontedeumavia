@@ -36,6 +36,7 @@ import javafx.scene.paint.Paint;
 /**
  *
  * @author Luan P
+ * Sem prefencia
  */
 
 
@@ -450,7 +451,7 @@ public class TrabalhoSO extends Application{
 
         try{
             
-            stage.setTitle("Trabalho SO");  
+            stage.setTitle("Trabalho SO - Sem Preferencia");  
             
             //imagens
             
