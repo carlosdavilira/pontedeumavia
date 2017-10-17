@@ -100,11 +100,10 @@ public class TrabalhoSO extends Application{
         private double posx = 0;
         private double posy = 0;
         private int tempf = 0;
-        private Rectangle retcar;
         
         private Semaphore acorda = new Semaphore(1);
 
-        public Carro(int id,int tempo_travessia,int tempo_espera,String origem, ImageView btncar, Stage stage,ImageView btncar2,Rectangle retcar){
+        public Carro(int id,int tempo_travessia,int tempo_espera,String origem, ImageView btncar, Stage stage,ImageView btncar2,Group root){
 
             this.id = id;
             this.tempo_espera = tempo_espera;
@@ -117,7 +116,26 @@ public class TrabalhoSO extends Application{
             this.posx = stage.getX();
             this.posy = stage.getY();
             this.tempf = tempo_travessia*1000;
-            this.retcar = retcar;
+            
+            btncar2.setOnMousePressed(new EventHandler<MouseEvent>(){
+            
+                public void handle(MouseEvent event){
+                    if(lisponte.indexOf(this)>=0){
+                        lisponte.remove(this);
+                    }
+                    if(lista_oeste.indexOf(this)>=0){
+                        lista_oeste.remove(this);
+                    }
+                    if(lista_leste.indexOf(this)>=0){
+                        lista_leste.remove(this);
+                    }
+                    mata_thread=2;
+                    root.getChildren().remove(btncar);
+                    //root2.getChildren().remove(btncar2);
+                    stage.close();
+                }
+
+            });
             
         }
 
@@ -164,18 +182,15 @@ public class TrabalhoSO extends Application{
                     mutex.release();
                     
                     // carro esperando
-      
+                    
+                    
                     btncar.setScaleX(0.08);
                     btncar.setScaleY(0.2);
                     btncar.setLayoutY(-95);
                     
-                    retcar.setX(btncar.getX());
-                    retcar.setLayoutY(-95);
-                    retcar.setScaleX(btncar.getScaleX());
-                    retcar.setScaleY(btncar.getScaleY());
-                    
                     btncar2.setScaleX(0.3);
                     btncar2.setScaleY(0.4);
+
                     stage.setY(posy + 290 + new Random().nextInt(241));
                     
                     if(origem.equals("oeste")){
@@ -297,7 +312,7 @@ public class TrabalhoSO extends Application{
                     
                     System.out.println("Carro "+id+" entrou na ponte");
                     // atravessando a ponte
-                    
+                    btncar2.setImage(new Image(new FileInputStream("C:\\images\\truck2.png"))); 
                     if(origem.equals("oeste")){
                           
                         oeste.acquire(1);
@@ -447,14 +462,6 @@ public class TrabalhoSO extends Application{
             ImageView side = new ImageView(side1);
             ImageView mina = new ImageView(mina1);
             
-            mina.setOnMousePressed(new EventHandler<MouseEvent>(){
-            
-                public void handle(MouseEvent event){
-                    System.out.println("mina");
-                }
-            
-            });
-            
             side.setLayoutX(0);
             mina.setLayoutX(1000);
             
@@ -501,8 +508,6 @@ public class TrabalhoSO extends Application{
                     
                     ImageView btncar = new ImageView();
                     ImageView btncar2 = new ImageView();
-                    Rectangle retcar = new Rectangle(btncar.getFitHeight(),btncar.getFitHeight(),btncar.getFitWidth(),btncar.getFitWidth());
-                    retcar.setFill(Paint.valueOf("red"));
                     
                     btncar2.setLayoutX(-347);
                     btncar2.setLayoutY(-115);
@@ -523,11 +528,13 @@ public class TrabalhoSO extends Application{
                     stage2.toFront();
                     stage.toBack();
                     
-                    Carro carro = new Carro(liscar.size()+1,tempo_travessia1,tempo_espera1,origem1,btncar,stage2,btncar2,retcar);
+                    Carro carro = new Carro(liscar.size()+1,tempo_travessia1,tempo_espera1,origem1,btncar,stage2,btncar2,root);
                     liscar.add(carro);
                     carro.start();
-                    root.getChildren().add(retcar);
                     root.getChildren().add(btncar);
+                    
+                    mina.toFront();
+                    side.toFront();
                     
                 }
                 
